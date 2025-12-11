@@ -28,6 +28,7 @@ Schema:
     [
       {
         "filename":     string,
+        "mode":         string,
         "hash":         string,
       }
     ]
@@ -38,31 +39,39 @@ Examples:
     [
       {
         "filename": "devtoolset-3-gcc-4.9.2-6.el7.x86_64.rpm",
+        "mode": " ",
         "hash": "65fc958c1add637ec23c4b137aecf3d3"
       },
       {
         "filename": "digout",
+        "mode": " ",
         "hash": "5b9312ee5aff080927753c63a347707d"
       },
       {
         "filename": "dmidecode.out",
+        "mode": " ",
         "hash": "716fd11c2ac00db109281f7110b8fb9d"
       },
       {
         "filename": "file with spaces in the name",
+        "mode": " ",
         "hash": "d41d8cd98f00b204e9800998ecf8427e"
       },
       {
         "filename": "id-centos.out",
+        "mode": " ",
         "hash": "4295be239a14ad77ef3253103de976d2"
       },
       {
         "filename": "ifcfg.json",
+        "mode": " ",
         "hash": "01fda0d9ba9a75618b072e64ff512b43"
       },
       ...
     ]
 """
+import re
+
 import jc.utils
 
 
@@ -127,13 +136,17 @@ def parse(data, raw=False, quiet=False):
                 file_name = line.split('=', maxsplit=1)[0].strip()
                 file_name = file_name[5:]
                 file_name = file_name[:-1]
+                # filler, legacy md5 always uses binary mode
+                file_mode = ""
             # standard md5sum and shasum command output
             else:
-                file_hash = line.split(maxsplit=1)[0]
-                file_name = line.split(maxsplit=1)[1]
+                if not (m:= re.match('(\S+) ([ ?*])(.*)$', line)):
+                    raise ValueError(f'Invalid line format: "{line}"')
+                file_hash, file_mode, file_name = m.groups()
 
             item = {
                 'filename': file_name,
+                'mode': file_mode,
                 'hash': file_hash
             }
             raw_output.append(item)
