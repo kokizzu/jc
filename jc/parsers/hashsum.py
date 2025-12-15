@@ -140,7 +140,7 @@ def parse(data, raw=False, quiet=False):
                 file_mode = ""
             # standard md5sum and shasum command output
             else:
-                m = re.match('([0-9a-f]+) ([ ?*])(.*)$', line)
+                m = re.match('([0-9a-f]+) (.)(.*)$', line)
                 if not m:
                     raise ValueError(f'Invalid line format: "{line}"')
                 file_hash, file_mode, file_name = m.groups()
