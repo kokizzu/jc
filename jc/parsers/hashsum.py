@@ -39,32 +39,32 @@ Examples:
     [
       {
         "filename": "devtoolset-3-gcc-4.9.2-6.el7.x86_64.rpm",
-        "mode": " ",
+        "mode": "text",
         "hash": "65fc958c1add637ec23c4b137aecf3d3"
       },
       {
         "filename": "digout",
-        "mode": " ",
+        "mode": "text",
         "hash": "5b9312ee5aff080927753c63a347707d"
       },
       {
         "filename": "dmidecode.out",
-        "mode": " ",
+        "mode": "text",
         "hash": "716fd11c2ac00db109281f7110b8fb9d"
       },
       {
         "filename": "file with spaces in the name",
-        "mode": " ",
+        "mode": "text",
         "hash": "d41d8cd98f00b204e9800998ecf8427e"
       },
       {
         "filename": "id-centos.out",
-        "mode": " ",
+        "mode": "text",
         "hash": "4295be239a14ad77ef3253103de976d2"
       },
       {
         "filename": "ifcfg.json",
-        "mode": " ",
+        "mode": "text",
         "hash": "01fda0d9ba9a75618b072e64ff512b43"
       },
       ...
@@ -90,6 +90,15 @@ class info():
 
 __version__ = info.version
 
+_mode_friendly_names = {
+    " ": "text",
+    "*": "binary",
+    # Perl shasum -- specific
+    "U": "universal",
+    "^": "bits",
+    # BSD-style format only supports binary mode
+    None: "binary"
+}
 
 def _process(proc_data):
     """
@@ -104,7 +113,9 @@ def _process(proc_data):
         List of Dictionaries. Structured data to conform to the schema.
     """
 
-    # no further processing for this parser
+    for entry in proc_data:
+        entry['mode'] = _mode_friendly_names.get(entry['mode'],entry['mode'])
+
     return proc_data
 
 
@@ -137,7 +148,7 @@ def parse(data, raw=False, quiet=False):
                 file_name = file_name[5:]
                 file_name = file_name[:-1]
                 # filler, legacy md5 always uses binary mode
-                file_mode = ""
+                file_mode = None
             # standard md5sum and shasum command output
             else:
                 m = re.match('([0-9a-f]+) (.)(.*)$', line)
