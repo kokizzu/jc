@@ -18,10 +18,10 @@ class MyTests(unittest.TestCase):
     with open(os.path.join(THIS_DIR, os.pardir, 'tests/fixtures/centos-7.7/sha384sum.out'), 'r', encoding='utf-8') as f:
         centos_7_7_sha384sum = f.read()
 
-    with open(os.path.join(THIS_DIR, os.pardir, 'tests/fixtures/centos-7.7/sha384sum.out'), 'r', encoding='utf-8') as f:
+    with open(os.path.join(THIS_DIR, os.pardir, 'tests/fixtures/ubuntu-24.04/sha256sum.out'), 'r', encoding='utf-8') as f:
         ubuntu_24_04_sha256sum = f.read()
 
-    with open(os.path.join(THIS_DIR, os.pardir, 'tests/fixtures/centos-7.7/sha384sum.out'), 'r', encoding='utf-8') as f:
+    with open(os.path.join(THIS_DIR, os.pardir, 'tests/fixtures/ubuntu-24.04/shasum.out'), 'r', encoding='utf-8') as f:
         ubuntu_24_04_shasum = f.read()
 
     with open(os.path.join(THIS_DIR, os.pardir, 'tests/fixtures/osx-10.14.6/md5.out'), 'r', encoding='utf-8') as f:
