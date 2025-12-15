@@ -5,6 +5,7 @@ build/
 *.egg-info/
 .github/
 .vscode/
+.idea/
 _config.yml
 .venv
 .DS_Store
