@@ -1,6 +1,5 @@
 import setuptools
 
-# force tests
 
 with open('README.md', 'r') as f:
     long_description = f.read()
