@@ -1,6 +1,8 @@
 jc changelog
 
-20260227 v1.25.7
+20260306 v1.25.7
+- Fix `proc-pid-smaps` proc parser when unknown VmFlags are output
+- Fix `iptables` command parser when Target is blank and verbose output is used
 
 20251012 v1.25.6
 - Add `net-localgroup` Windows command parser
