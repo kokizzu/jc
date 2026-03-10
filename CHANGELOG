@@ -1,6 +1,7 @@
 jc changelog
 
-20260306 v1.25.7
+20260309 v1.25.7
+- Enhance `rsync` and `rsync-s` parsers to add `--stats` or `--info=stats[1-3]` fields
 - Fix `proc-pid-smaps` proc parser when unknown VmFlags are output
 - Fix `iptables` command parser when Target is blank and verbose output is used
 
