@@ -1,6 +1,6 @@
 jc changelog
 
-20260310 v1.25.7
+20260313 v1.25.7
 - Add `typeset` and `declare` Bash internal command parser to convert variables
   simple arrays, and associative arrays along with object metadata
 - Enhance `rsync` and `rsync-s` parsers to add `--stats` or `--info=stats[1-3]` fields

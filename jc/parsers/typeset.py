@@ -19,9 +19,8 @@ Schema:
     [
       {
         "name":         string,
-        "value":        string/array/object/null,    # [0]
-        "int_value":    integer/array/object/null,   # [1]
-        "type":         string,                      # [2]
+        "value":        string/integer/array/object/null,    # [0]
+        "type":         string,                              # [1]
         "readonly":     boolean/null,
         "integer":      boolean/null,
         "lowercase":    boolean/null,
@@ -36,28 +35,84 @@ Schema:
     If declare options are not given to `jc` within the `typeset` output, then
     it will assume all arrays are simple `array` type.
 
-    [0] Based on type. `variable` type is always string value when set, null if
-        not set. `array` type value is an array of strings. `associative` type
-        value is an object of key/value pairs where values are strings.
-        Objects have the schema of:
+    [0] Based on type. `variable` type is null if not set, a string when the
+        bash variable is set unless the `integer` field is set to `True`, then
+        the type is integer. `array` type is an array of strings or integers as
+        above. `associative` type is an object of key/value pairs where values
+        are strings or integers as above. Objects have the schema of:
 
         {
-          "<key1>": string,
-          "<key2>": string
+          "<key1>": string/integer,
+          "<key2>": string/integer
         }
 
-    [1] If the variable is set as `integer` then same as above except values are
-        integers. This value is set to null if the `integer` flag is not set.
-
-    [2] Possible values: `variable`, `array`, or `associative`
+    [1] Possible values: `variable`, `array`, or `associative`
 
 Examples:
 
-    $ typeset | jc --typeset -p
-    []
+    $ typeset -p | jc --typeset -p
+    [
+      {
+        "name": "associative_array",
+        "value": {
+          "key2": "abc",
+          "key3": "1 2 3",
+          "key1": "hello \"world\""
+        },
+        "type": "associative",
+        "readonly": false,
+        "integer": false,
+        "lowercase": false,
+        "uppercase": false,
+        "exported": false
+      },
+      {
+        "name": "integers_associative_array",
+        "value": {
+          "one": 1,
+          "two": 500,
+          "three": 999
+        },
+        "type": "associative",
+        "readonly": false,
+        "integer": true,
+        "lowercase": false,
+        "uppercase": false,
+        "exported": false
+      }
+    ]
 
-    $ typeset | jc --typeset -p -r
-    []
+    $ typeset -p | jc --typeset -p -r
+    [
+      {
+        "name": "associative_array",
+        "value": {
+          "key2": "abc",
+          "key3": "1 2 3",
+          "key1": "hello \"world\""
+        },
+        "type": "associative",
+        "readonly": false,
+        "integer": false,
+        "lowercase": false,
+        "uppercase": false,
+        "exported": false
+      },
+      {
+        "name": "integers_associative_array",
+        "value": {
+          "one": "1",
+          "two": "500",
+          "three": "999"
+        },
+        "type": "associative",
+        "readonly": false,
+        "integer": true,
+        "lowercase": false,
+        "uppercase": false,
+        "exported": false
+      }
+    ]
 """
 import shlex
 import re
@@ -100,7 +155,7 @@ def _process(proc_data: List[JSONDictType]) -> List[JSONDictType]:
     """
     for item in proc_data:
         if item['type'] == 'variable' and item['integer']:
-            item['int_value'] = jc.utils.convert_to_int(item['value'])
+            item['value'] = jc.utils.convert_to_int(item['value'])
 
         elif item['type'] == 'array' and item['integer'] \
             and isinstance(item['value'], list):
@@ -109,7 +164,7 @@ def _process(proc_data: List[JSONDictType]) -> List[JSONDictType]:
             for number in item['value']:
                 new_num_list.append(jc.utils.convert_to_int(number))
 
-            item['int_value'] = new_num_list
+            item['value'] = new_num_list
 
         elif (item['type'] == 'array' and item['integer'] \
             and isinstance(item['value'], dict)) \
@@ -119,7 +174,7 @@ def _process(proc_data: List[JSONDictType]) -> List[JSONDictType]:
             for key, val in item['value'].items():
                 new_num_dict.update({key: jc.utils.convert_to_int(val)})
 
-            item['int_value'] = new_num_dict
+            item['value'] = new_num_dict
 
     return proc_data
 
@@ -141,8 +196,7 @@ def _get_associative_array_vals(body: str) -> Dict[str, str]:
     for item in body_split:
         key, val = item.split('=', maxsplit=1)
         key = _remove_bookends(key, '[', ']')
-        key_val = {key: val}
-        values.update(key_val)
+        values.update({key: val})
     return values
 
 
@@ -167,8 +221,6 @@ def _get_declare_options(line: str, type_hint: str = 'variable') -> Dict:
     declare_opts_match = re.match(DECLARE_OPTS_PATTERN, line)
     if declare_opts_match:
         for opt in declare_opts_match['options']:
-            if opt == '-':
-                continue
             if opt in opts_map:
                 opts[opts_map[opt]] = True
                 continue
@@ -195,6 +247,7 @@ def _remove_quotes(data: str, remove_char: str ='"') -> str:
     if data.startswith(remove_char) and data.endswith(remove_char):
         return data[1:-1]
     return data
+
 
 def parse(
     data: str,
@@ -226,7 +279,6 @@ def parse(
             item = {
                 "name": '',
                 "value": '',
-                "int_value": None,
                 "type": None,
                 "readonly": None,
                 "integer":  None,
