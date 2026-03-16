@@ -71,13 +71,12 @@ Examples:
     ]
 """
 import re
-
 import jc.utils
 
 
 class info():
     """Provides parser metadata (version, author, etc.)"""
-    version = '1.2'
+    version = '1.3'
     description = 'hashsum command parser (`md5sum`, `shasum`, etc.)'
     author = 'Kelly Brazil'
     author_email = 'kellyjonbrazil@gmail.com'
@@ -163,7 +162,4 @@ def parse(data, raw=False, quiet=False):
             }
             raw_output.append(item)
 
-    if raw:
-        return raw_output
-    else:
-        return _process(raw_output)
+    return raw_output if raw else _process(raw_output)
