@@ -26,7 +26,8 @@ Schema:
         "license":          string,
         "location":         string,
         "requires":         string,
-        "required_by":      string
+        "required_by":      string,
+        "files":            list
       }
     ]
 
@@ -60,7 +61,7 @@ Examples:
       }
     ]
 """
-from typing import List, Dict, Optional
+from typing import List, Dict
 import jc.utils
 
 
@@ -120,6 +121,22 @@ def parse(
     last_key: str = ''
     last_key_data: List = []
 
+    def flush_last_key_data() -> None:
+        """Append buffered continuation lines to the previous field."""
+        nonlocal last_key_data
+
+        if not last_key_data:
+            return
+
+        if last_key == 'files':
+            package[last_key].extend(last_key_data)
+        else:
+            if not isinstance(package[last_key], str):
+                package[last_key] = ''
+            package[last_key] = package[last_key] + '\n' + '\n'.join(last_key_data)
+
+        last_key_data = []
+
     # Clear any blank lines
     cleandata = list(filter(None, data.splitlines()))
 
@@ -127,8 +144,7 @@ def parse(
 
         for row in cleandata:
             if row.startswith('---'):
-                if last_key_data:
-                    package[last_key] = package[last_key] + '\n' + '\n'.join(last_key_data)
+                flush_last_key_data()
 
                 raw_output.append(package)
                 package = {}
@@ -137,17 +153,17 @@ def parse(
                 continue
 
             if not row.startswith(' '):
-                item_key = row.split(': ', maxsplit=1)[0].lower().replace('-', '_')
-                item_value: Optional[str] = row.split(': ', maxsplit=1)[1]
+                item_key, item_value = row.split(':', maxsplit=1)
+                item_key = item_key.lower().replace('-', '_')
+                item_value = item_value.lstrip()
 
-                if item_value == '':
+                if item_key == 'files':
+                    item_value = []
+                elif item_value == '':
                     item_value = None
 
                 if last_key_data and last_key != item_key:
-                    if not isinstance(package[last_key], str):
-                        package[last_key] = ''
-                    package[last_key] = package[last_key] + '\n' + '\n'.join(last_key_data)
-                    last_key_data = []
+                    flush_last_key_data()
 
                 package[item_key] = item_value
                 last_key = item_key
@@ -158,8 +174,7 @@ def parse(
                 continue
 
         if package:
-            if last_key_data:
-                package[last_key] = package[last_key] + '\n' + '\n'.join(last_key_data)
+            flush_last_key_data()
 
             raw_output.append(package)
 
