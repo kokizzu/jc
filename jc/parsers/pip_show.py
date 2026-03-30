@@ -27,7 +27,9 @@ Schema:
         "location":         string,
         "requires":         string,
         "required_by":      string,
-        "files":            list
+        "files": [
+                            string
+        ]
       }
     ]
 
@@ -67,7 +69,7 @@ import jc.utils
 
 class info():
     """Provides parser metadata (version, author, etc.)"""
-    version = '1.5'
+    version = '1.6'
     description = '`pip show` command parser'
     author = 'Kelly Brazil'
     author_email = 'kellyjonbrazil@gmail.com'
