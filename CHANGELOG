@@ -1,11 +1,12 @@
 jc changelog
 
-20260316 v1.25.7
+20260330 v1.25.7
 - Add `typeset` and `declare` Bash internal command parser to convert variables
   simple arrays, and associative arrays along with object metadata
 - Enhance `rsync` and `rsync-s` parsers to add `--stats` or `--info=stats[1-3]` fields
 - Fix `hashsum` command parser to correctly parse the `mode` indicator
 - Fix `proc-pid-smaps` proc parser when unknown VmFlags are output
+- Fix `ifconfig` command parser for incorrect stripping of leading zeros in some hex numbers
 - Fix `iptables` command parser when Target is blank and verbose output is used
 
 20251012 v1.25.6
