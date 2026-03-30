@@ -6,6 +6,7 @@ jc changelog
 - Enhance `pip-show` command parser to add `-f` show files support
 - Enhance `rsync` and `rsync-s` parsers to add `--stats` or `--info=stats[1-3]` fields
 - Fix `hashsum` command parser to correctly parse the `mode` indicator
+- Fix `dir` command parser for incorrect stripping of the `D:` drive letter
 - Fix `proc-pid-smaps` proc parser when unknown VmFlags are output
 - Fix `ifconfig` command parser for incorrect stripping of leading zeros in some hex numbers
 - Fix `iptables` command parser when Target is blank and verbose output is used
