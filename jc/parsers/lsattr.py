@@ -149,7 +149,11 @@ def parse(
 
         # attributes file
         # --------------e----- /etc/passwd
-        attributes, file = line.split()
+        # Use maxsplit=1 to handle filenames with spaces (e.g. "./ok ok ok ok ok")
+        parts = line.split(maxsplit=1)
+        if len(parts) != 2:
+            continue
+        attributes, file = parts
         line_output['file'] = file
         for attribute in list(attributes):
             attribute_key = ATTRIBUTES.get(attribute)
