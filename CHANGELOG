@@ -12,6 +12,7 @@ jc changelog
 - Fix `proc-pid-smaps` proc parser when unknown VmFlags are output
 - Fix `ifconfig` command parser for incorrect stripping of leading zeros in some hex numbers
 - Fix `iptables` command parser when Target is blank and verbose output is used
+- Fix `ufw` command parser to support rule logging. A new boolean `log` field is introduced
 
 20251012 v1.25.6
 - Add `net-localgroup` Windows command parser
