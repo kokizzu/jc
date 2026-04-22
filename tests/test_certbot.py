@@ -10,7 +10,7 @@ THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 class MyTests(unittest.TestCase):
     f_in: Dict = {}
     f_json: Dict = {}
-    maxDiff = None
+
     @classmethod
     def setUpClass(cls):
         fixtures = {
