@@ -1,8 +1,8 @@
 r"""jc - JSON Convert `tsv` implicit header file parser
 
-The `tsv` parser is a clone of the `csv` parser that uses '\t'
-as the delimiter character.
-The file must have no header, and the field names will be generated as "c0", "c1", etc.
+The `tsv` implicit header file parser is a clone of the `csv` implicit
+header file parser that uses '\t' as the delimiter character. The file must
+have no header, and the field names will be generated as "c0", "c1", etc.
 
 Usage (cli):
 
@@ -20,8 +20,8 @@ https://docs.python.org/3/library/csv.html
 
     [
       {
-        "column_name1":     string,
-        "column_name1":     string
+        "c0":     string,
+        "c1":     string
       }
     ]
 
@@ -79,10 +79,10 @@ import jc.utils
 
 class info():
     """Provides parser metadata (version, author, etc.)"""
-    version = '1.5'
+    version = '1.0'
     description = 'TSV implicit header file parser'
-    author = 'N/A'
-    author_email = 'N/A'
+    author = 'Gary Gurlaskie'
+    author_email = 'https://github.com/garyg1'
     details = 'Using the python standard csv library'
     compatible = ['linux', 'darwin', 'cygwin', 'win32', 'aix', 'freebsd']
     tags = ['standard', 'file', 'string']

@@ -1,9 +1,15 @@
-r"""jc - JSON Convert `csv` implicit header file parser
+r"""jc - JSON Convert `csv` implicit header file streaming parser
+
+> This streaming parser outputs JSON Lines (cli) or returns an Iterable of
+> Dictionaries (module)
 
 The `csv` implicit header parser will attempt to automatically detect the
 delimiter character. If the delimiter cannot be detected it will default to
 comma. The file must have no header, and the field names will be generated
 as "c0", "c1", etc.
+
+> Note: The first 100 rows are read into memory to enable delimiter
+> detection, then the rest of the rows are loaded lazily.
 
 Usage (cli):
 
@@ -19,12 +25,17 @@ Schema:
 CSV file converted to a Dictionary:
 https://docs.python.org/3/library/csv.html
 
-    [
-      {
-        "column_name1":     string,
-        "column_name2":     string
+    {
+      "c0":     string,
+      "c1":     string,
+
+      # below object only exists if using -qq or ignore_exceptions=True
+      "_jc_meta": {
+        "success":        boolean,     # false if error parsing
+        "error":          string,      # exists if "success" is false
+        "line":           string       # exists if "success" is false
       }
-    ]
+    }
 
 Examples:
 
@@ -34,59 +45,29 @@ Examples:
     129, 132, 13,  6, 3, 1,  41, 0.33,  1471
     ...
 
-    $ cat homes.csv | jc --csv-ih -p
-    [
-      {
-        "c0": "142",
-        "c1": "160",
-        "c2": "28",
-        "c3": "10",
-        "c4": "5",
-        "c5": "3",
-        "c6": "60",
-        "c7": "0.28",
-        "c8": "3167"
-      },
-      {
-        "c0": "175",
-        "c1": "180",
-        "c2": "18",
-        "c3": "8",
-        "c4": "4",
-        "c5": "1",
-        "c6": "12",
-        "c7": "0.43",
-        "c8": "4033"
-      },
-      {
-        "c0": "129",
-        "c1": "132",
-        "c2": "13",
-        "c3": "6",
-        "c4": "3",
-        "c5": "1",
-        "c6": "41",
-        "c7": "0.33",
-        "c8": "1471"
-      },
-      ...
-    ]
+    $ cat homes.csv | jc --csv-ih-s
+    {"c0":"142","c1":"160","c2":"28","c3":"10","c4":"5"...}
+    {"c0":"175","c1":"180","c2":"18","c3":"8","c4":"4"...}
+    {"c0":"129","c1":"132","c2":"13","c3":"6","c4":"3"...}
+    ...
 """
 from typing import List, Union
 from jc.jc_types import JSONDictType
-import jc.parsers.csv as jc_csv
+import jc.parsers.csv_s as jc_csv_s
+from jc.streaming import streaming_input_type_check
 import jc.utils
 
 
 class info():
     """Provides parser metadata (version, author, etc.)"""
     version = '1.0'
-    description = 'CSV implicit header file parser'
-    author = 'Gary Gurlaskie'
-    author_email = 'https://github.com/garyg1'
+    description = 'CSV implicit header file streaming parser'
+    author = 'Kelly Brazil'
+    author_email = 'kellyjonbrazil@gmail.com'
     details = 'Using the python standard csv library'
     compatible = ['linux', 'darwin', 'cygwin', 'win32', 'aix', 'freebsd']
     tags = ['standard', 'file', 'string']
+    streaming = True
 
 
 __version__ = info.version
@@ -94,7 +75,8 @@ __version__ = info.version
 def parse(
     data: Union[str, bytes],
     raw: bool = False,
-    quiet: bool = False
+    quiet: bool = False,
+    ignore_exceptions: bool = False,
 ) -> List[JSONDictType]:
     """
     Main text parsing function
@@ -110,5 +92,4 @@ def parse(
         List of Dictionaries. Raw or processed structured data.
     """
     jc.utils.compatibility(__name__, info.compatible, quiet)
-    jc.utils.input_type_check(data)
-    return jc_csv.parse(data, raw, quiet, implicit_header=True)
+    return jc_csv_s.parse(data, raw, quiet, ignore_exceptions, implicit_header=True)

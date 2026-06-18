@@ -1,6 +1,14 @@
 jc changelog
 
-20260422 v1.25.7
+20260617 v1.25.7
+- Add `csv-ih`, `tsv`, and `tsv-ih` file parsers for CSV files without headers,
+  TSV files, and TSV files without headers. Note that these are standard and
+  not streaming parsers so the entire CSV/TSV will be loaded into memory. For
+  lazy loading equivalents, see below.
+- Add `csv-ih-s`, `tsv-s`, and `tsv-ih-s` streaming file parsers for CSV files
+  without headers, TSV files, and TSV files without headers. These streaming
+  parsers will lazily load the data into memory and may be more suitable for
+  extremely large files.
 - Add `typeset` and `declare` Bash internal command parser to convert variables
   simple arrays, and associative arrays along with object metadata
 - Enhance `pip-show` command parser to add `-f` show files support
@@ -13,6 +21,7 @@ jc changelog
 - Fix `lsattr` command parser for filenames with spaces (newlines in filenames are
   still not supported)
 - Fix `proc-pid-smaps` proc parser when unknown VmFlags are output
+- Fix `jc.utils.timestamp` function and tests for behavior change in python 3.15
 - Fix `ufw` command parser to support rule logging. A new boolean `log` field is introduced
 
 20251012 v1.25.6

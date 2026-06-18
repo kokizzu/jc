@@ -206,10 +206,9 @@ class MyTests(unittest.TestCase):
         """
         self.assertEqual(jc.parsers.tsv_ih.parse(self.generic_tsv_ih_dpkg_query_csv, quiet=True), self.generic_tsv_ih_dpkg_query_json)
 
-
     def test_tsv_simple_double_quote(self):
         """
-        Test 'tsv_ih-dpkg-query.tsv' file in implicit header mode.
+        Test 'tsv_ih-simple-double-quote.tsv' file in implicit header mode.
         """
         self.assertEqual(jc.parsers.tsv_ih.parse(self.generic_tsv_simple_double_quote_csv, quiet=True), self.generic_tsv_simple_double_quote_json)
 

@@ -79,10 +79,10 @@ import jc.utils
 
 class info():
     """Provides parser metadata (version, author, etc.)"""
-    version = '1.5'
+    version = '1.0'
     description = 'TSV file parser'
-    author = 'N/A'
-    author_email = 'N/A'
+    author = 'Gary Gurlaskie'
+    author_email = 'https://github.com/garyg1'
     details = 'Using the python standard csv library'
     compatible = ['linux', 'darwin', 'cygwin', 'win32', 'aix', 'freebsd']
     tags = ['standard', 'file', 'string']
