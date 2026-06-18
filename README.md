@@ -123,7 +123,6 @@ pip3 install jc
 | FreeBSD                              | `portsnap fetch update && cd /usr/ports/textproc/py-jc && make install clean` |
 | Ansible filter plugin                | `ansible-galaxy collection install community.general`                         |
 | FortiSOAR connector                  | Install from FortiSOAR Connector Marketplace                                  |
-| Mise-en-place (Linux/MacOS)          | `mise use -g jc@latest`                                                       |
 
 > For more OS Packages, see https://repology.org/project/jc/versions.
 
@@ -178,8 +177,9 @@ option.
 |       `--crontab` | `crontab` command and file parser                       | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/crontab)        |
 |     `--crontab-u` | `crontab` file parser with user support                 | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/crontab_u)      |
 |           `--csv` | CSV file parser                                         | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/csv)            |
-|         `--csv-s` | CSV file streaming parser                               | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/csv_s)          |
 |        `--csv-ih` | CSV implicit header file parser                         | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/csv_ih)         |
+|         `--csv-s` | CSV file streaming parser                               | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/csv_s)          |
+|      `--csv-ih-s` | CSV implicit header file streaming parser               | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/csv_ih_s)       |
 |     `--curl-head` | `curl --head` command parser                            | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/curl_head)      |
 |          `--date` | `date` command parser                                   | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/date)           |
 |  `--datetime-iso` | ISO 8601 Datetime string parser                         | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/datetime_iso)   |
@@ -310,7 +310,10 @@ option.
 |  `--traceroute-s` | `traceroute` and `traceroute6` command streaming parser | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/traceroute_s)   |
 |           `--tsv` | TSV file parser                                         | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/tsv)            |
 |        `--tsv-ih` | TSV implicit header file parser                         | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/tsv_ih)         |
+|         `--tsv-s` | TSV file streaming parser                               | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/tsv_s)          |
+|      `--tsv-ih-s` | TSV implicit header file streaming parser               | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/tsv_ih_s)       |
 |       `--tune2fs` | `tune2fs -l` command parser                             | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/tune2fs)        |
+|       `--typeset` | `typeset` and `declare` command parser                  | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/typeset)        |
 |       `--udevadm` | `udevadm info` command parser                           | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/udevadm)        |
 |           `--ufw` | `ufw status` command parser                             | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/ufw)            |
 |   `--ufw-appinfo` | `ufw app info [application]` command parser             | [details](https://kellyjonbrazil.github.io/jc/docs/parsers/ufw_appinfo)    |
@@ -1387,4 +1390,4 @@ cat istio.yaml | jc -p --yaml
 ]
 ```
 
-© 2019-2025 Kelly Brazil
+© 2019-2026 Kelly Brazil
